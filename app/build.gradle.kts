@@ -45,10 +45,19 @@ dependencies {
 }
 
 
-//task androidSourcesJar(type: Jar) {
-//    archiveClassifier.set("sources")
-//    from android.sourceSets.main.java.srcDirs
-//}
+// Also publish the sources:
+lateinit var sourcesArtifact: PublishArtifact
+tasks {
+    val sourcesJar by creating(Jar::class) {
+        archiveClassifier.set("sources")
+        from(android.sourceSets.getByName("main").java.srcDirs)
+    }
+
+    artifacts {
+        sourcesArtifact = archives(sourcesJar)
+    }
+}
+
 
 // Because the components are created only during the afterEvaluate phase, you must
 // configure your publications using the afterEvaluate() lifecycle method.
@@ -61,6 +70,7 @@ afterEvaluate {
                 artifactId = "test"
                 version = "${versionMajor}.${versionMinor}.${versionPatch}"
                 from(components["release"])
+                artifact(sourcesArtifact)
             }
         }
         repositories {
