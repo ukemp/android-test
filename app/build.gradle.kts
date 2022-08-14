@@ -7,14 +7,14 @@ plugins {
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 0
+val versionPatch = 1
 
 android {
-    compileSdk = 31
+    compileSdk = 32
 
     defaultConfig {
         minSdk = 19
-        targetSdk = 31
+        targetSdk = 32
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -39,8 +39,8 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("junit:junit:4.13.2")
 
-    testImplementation("org.robolectric:robolectric:4.7.3")
-    testImplementation("org.robolectric:shadows-multidex:4.7.3")
+    testImplementation("org.robolectric:robolectric:4.8.1")
+    testImplementation("org.robolectric:shadows-multidex:4.8.1")
     testImplementation("androidx.test.ext:truth:1.4.0")
 }
 
