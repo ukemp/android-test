@@ -1,2 +1,3 @@
 # Android Unit Test
-Simple Android library providing a logging via Timber logging framework for unit tests.
+Very simple Android library providing logging via [Timber](https://github.com/JakeWharton/timber) 
+logging framework for unit tests.

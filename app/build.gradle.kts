@@ -1,3 +1,4 @@
+import java.net.URI
 
 plugins {
     id("com.android.library")
@@ -10,12 +11,21 @@ val versionMinor = 0
 val versionPatch = 1
 
 android {
-    compileSdk = 32
+    compileSdk = 35
+
+    namespace = "de.kempmobil.test"
 
     defaultConfig {
-        minSdk = 19
-        targetSdk = 32
+        minSdk = 21
+        targetSdk = 35
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
+        }
     }
 
     buildTypes {
@@ -45,23 +55,9 @@ dependencies {
 }
 
 
-// Also publish the sources:
-lateinit var sourcesArtifact: PublishArtifact
-tasks {
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(android.sourceSets.getByName("main").java.srcDirs)
-    }
-
-    artifacts {
-        sourcesArtifact = archives(sourcesJar)
-    }
-}
-
-
 // Because the components are created only during the afterEvaluate phase, you must
 // configure your publications using the afterEvaluate() lifecycle method.
-val gitLabDeployToken: String by project
+val githubDeployToken: String by project
 afterEvaluate {
     publishing {
         publications {
@@ -70,19 +66,15 @@ afterEvaluate {
                 artifactId = "test"
                 version = "${versionMajor}.${versionMinor}.${versionPatch}"
                 from(components["release"])
-                artifact(sourcesArtifact)
             }
         }
         repositories {
             maven {
-                url = uri("https://gitlab.com/api/v4/projects/30012057/packages/maven")
-                name = "Android Libraries"
-                credentials(HttpHeaderCredentials::class) {
-                    name = "Deploy-Token"
-                    value = gitLabDeployToken
-                }
-                authentication {
-                    create<HttpHeaderAuthentication>("header")
+                url = URI("https://maven.pkg.github.com/ukemp/android-test")
+                name = "Android unit test library"
+                credentials {
+                    username = "ukemp"
+                    password = githubDeployToken
                 }
             }
         }
